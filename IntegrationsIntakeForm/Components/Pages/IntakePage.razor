@@ -1,5 +1,6 @@
 @page "/intake"
 @using IntegrationsIntakeForm
+@using IntegrationsIntakeForm.Models
 
 <div class="container-fluid p-5">
     <div class="card shadow">
@@ -21,11 +22,6 @@
                         </div>
                     }
                 </div>
-            </section>
-
-            @* --- Section 2: Account Mapping --- *@
-            <section class="form-section mb-5">
-                <MappingRuleEditor FieldName="Global Account Mapping" @bind-Mapping="_formModel.GlobalAccountMapping" />
             </section>
 
             @* --- Section 3: Required ID Fields --- *@
