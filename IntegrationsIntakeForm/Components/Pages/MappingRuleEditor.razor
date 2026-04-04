@@ -1,0 +1,52 @@
+@using IntegrationsIntakeForm
+
+<div class="mapping-section border p-3 rounded mb-3">
+    <h5 class="mb-3 text-secondary">@FieldName Mapping Rules</h5>
+
+    <div class="form-check mb-2">
+        <input class="form-check-input" type="radio" name="@(FieldName)-mapping" id="@(FieldName)-none" value="@MappingType.NoMapping" @onchange="OnMappingTypeChanged">
+        <label class="form-check-label" for="@(FieldName)-none">
+            No mapping (single value)
+        </label>
+    </div>
+
+    <div class="form-check mb-2">
+        <input class="form-check-input" type="radio" name="@(FieldName)-mapping" id="@(FieldName)-onetoone" value="@MappingType.OneToOne" @onchange="OnMappingTypeChanged">
+        <label class="form-check-label" for="@(FieldName)-onetoone">
+            One-to-one (based on X segment)
+        </label>
+    </div>
+
+    <div class="form-check mb-2">
+        <input class="form-check-input" type="radio" name="@(FieldName)-mapping" id="@(FieldName)-manytoone" value="@MappingType.ManyToOne" @onchange="OnMappingTypeChanged">
+        <label class="form-check-label" for="@(FieldName)-manytoone">
+            Many-to-one (based on X segment)
+        </label>
+    </div>
+
+    @* Conditional text box for the segment *@
+    @if (Mapping.SelectedType == MappingType.OneToOne || Mapping.SelectedType == MappingType.ManyToOne)
+    {
+        <div class="form-group row mt-3 nested-option-panel p-2 rounded">
+            <label for="@(FieldName)-segment" class="col-sm-3 col-form-label font-weight-bold">X Segment for mapping:</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="@(FieldName)-segment" @bind="Mapping.XSegment" placeholder="e.g., segment.value">
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string FieldName { get; set; }
+    [Parameter] public MappingDetail Mapping { get; set; }
+    [Parameter] public EventCallback<MappingDetail> MappingChanged { get; set; }
+
+    private async Task OnMappingTypeChanged(ChangeEventArgs e)
+    {
+        if (Enum.TryParse<MappingType>(e.Value.ToString(), out var newType))
+        {
+            Mapping.SelectedType = newType;
+            await MappingChanged.InvokeAsync(Mapping);
+        }
+    }
+}
