@@ -115,19 +115,7 @@
                         </div>
                     </div>
                 }
-            </section>
-
-            @* --- Section 6: Misc Notes --- *@
-            <section class="form-section bg-light p-4 rounded mt-5">
-                <h4 class="mb-3 text-secondary">General Notes & Instructions</h4>
-                <ul class="list-group list-group-flush">
-                    @foreach (var note in _formModel.MiscNotes)
-                    {
-                        <li class="list-group-item bg-light border-0 py-1">• @note</li>
-                    }
-                </ul>
-            </section>
-            
+            </section>           
         </div>
         <div class="card-footer d-flex justify-content-end">
             <button class="btn btn-outline-secondary mr-2">Reset Form</button>
