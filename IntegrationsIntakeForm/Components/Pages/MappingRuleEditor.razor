@@ -1,52 +1,111 @@
 @using IntegrationsIntakeForm
+@using IntegrationsIntakeForm.Models
 
 <div class="mapping-section border p-3 rounded mb-3">
-    <h5 class="mb-3 text-secondary">@FieldName Mapping Rules</h5>
+    <h5 class="mb-3 text-secondary">@Field.FieldName</h5>
+    <EditForm Model="this">
+        <InputRadioGroup @bind-Value="Mapping.SelectedType"
+                         @bind-Value:after="() => HandleMappingRadio(Mapping.SelectedType)">
+            @foreach (MappingType type in Enum.GetValues(typeof(MappingType)))
+            {
+                string typeString = type.ToString();
+                <div class="form-check mb-2">
+                    <InputRadio Value="@type" />
+                    <label class="form-check-label" for="@($"{Field.FieldName}-{typeString}")">
+                        @GetLabelForType(type)
+                    </label>
+                </div>
+            }
+        </InputRadioGroup>
+    </EditForm>
 
-    <div class="form-check mb-2">
-        <input class="form-check-input" type="radio" name="@(FieldName)-mapping" id="@(FieldName)-none" value="@MappingType.NoMapping" @onchange="OnMappingTypeChanged">
-        <label class="form-check-label" for="@(FieldName)-none">
-            No mapping (single value)
-        </label>
-    </div>
+    <hr />
 
-    <div class="form-check mb-2">
-        <input class="form-check-input" type="radio" name="@(FieldName)-mapping" id="@(FieldName)-onetoone" value="@MappingType.OneToOne" @onchange="OnMappingTypeChanged">
-        <label class="form-check-label" for="@(FieldName)-onetoone">
-            One-to-one (based on X segment)
-        </label>
-    </div>
-
-    <div class="form-check mb-2">
-        <input class="form-check-input" type="radio" name="@(FieldName)-mapping" id="@(FieldName)-manytoone" value="@MappingType.ManyToOne" @onchange="OnMappingTypeChanged">
-        <label class="form-check-label" for="@(FieldName)-manytoone">
-            Many-to-one (based on X segment)
-        </label>
-    </div>
-
-    @* Conditional text box for the segment *@
-    @if (Mapping.SelectedType == MappingType.OneToOne || Mapping.SelectedType == MappingType.ManyToOne)
+    @switch (Mapping.SelectedType)
     {
-        <div class="form-group row mt-3 nested-option-panel p-2 rounded">
-            <label for="@(FieldName)-segment" class="col-sm-3 col-form-label font-weight-bold">X Segment for mapping:</label>
-            <div class="col-sm-6">
-                <input type="text" class="form-control" id="@(FieldName)-segment" @bind="Mapping.XSegment" placeholder="e.g., segment.value">
+        case MappingType.NoMapping:
+            <div class="mt-2">
+                <label class="fw-bold">Constant Value:</label>
+                <input type="text" class="form-control" @bind="Mapping.SingleValue" @bind:event="oninput"
+                       placeholder="Enter fixed value..." />
             </div>
-        </div>
+            break;
+        case MappingType.Dictionary:
+            <div class="mt-2">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6>1:1 Key-Value Pairs</h6>
+                    <button type="button" class="btn btn-sm btn-primary" @onclick="AddOneToOne">+ Add Row</button>
+                </div>
+
+                @foreach (var entry in Mapping.OneToOneMappings)
+                {
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control" placeholder="Source @Field.FieldName" @bind="entry.Key"
+                               @bind:event="oninput" />
+                        <input type="text" class="form-control" placeholder="Target @Field.FieldName" @bind="entry.Value"
+                               @bind:event="oninput" />
+                        <button type="button" class="btn btn-outline-danger"
+                                @onclick="async () =>
+                                            {
+                                                Mapping.OneToOneMappings.Remove(entry);
+                                                await MappingChanged.InvokeAsync(Mapping);
+                                            }">×
+                        </button>
+                    </div>
+                }
+            </div>
+            break;
+    }
+
+    @if (Field is PackageField packageField)
+    {
+        <fieldset>
+            <legend>Itemization</legend>
+            <label>
+                <input type="radio" name="EnableItemization_@Field.FieldName" value="true" @(packageField.EnableItemization
+                       ? "checked" : "" ) />
+                Enabled
+            </label>
+            <label>
+                <input type="radio" name="EnableItemization_@Field.FieldName" value="false"
+                       @(!packageField.EnableItemization ? "checked" : "" ) />
+                Disabled
+            </label>
+        </fieldset>
     }
 </div>
 
 @code {
-    [Parameter] public string FieldName { get; set; }
-    [Parameter] public MappingDetail Mapping { get; set; }
+    [Parameter] public RequiredField Field { get; set; } = new RequiredField();
+    [Parameter] public MappingDetail Mapping { get; set; } = new MappingDetail();
     [Parameter] public EventCallback<MappingDetail> MappingChanged { get; set; }
 
-    private async Task OnMappingTypeChanged(ChangeEventArgs e)
+    private void HandleMappingRadio(MappingType type)
     {
-        if (Enum.TryParse<MappingType>(e.Value.ToString(), out var newType))
+        Console.WriteLine(value: $"Selected mapping type: {type}");
+        switch (type)
         {
-            Mapping.SelectedType = newType;
-            await MappingChanged.InvokeAsync(Mapping);
+            case MappingType.NoMapping:
+                break;
+            case MappingType.Dictionary:
+                if (!Mapping.OneToOneMappings.Any())
+                    AddOneToOne();
+                break;
         }
+        MappingChanged.InvokeAsync(Mapping);
+    }
+
+    private void AddOneToOne() => Mapping.OneToOneMappings.Add(new MappingEntry("", ""));
+
+    private string GetLabelForType(MappingType type)
+    {
+        string _result = type switch
+        {
+            MappingType.NoMapping => "No mapping (single value)",
+            MappingType.Dictionary => "Mapping dictionary (based on X segment)",
+            _ => type.ToString()
+        };
+        Console.WriteLine(value: $"Mapping type: {type}, Label: {_result}");
+        return _result;
     }
 }
