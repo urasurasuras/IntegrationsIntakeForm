@@ -1,6 +1,7 @@
 @page "/intake"
 @using IntegrationsIntakeForm
 @using IntegrationsIntakeForm.Models
+@rendermode InteractiveServer
 
 <div class="container-fluid p-5">
     <div class="card shadow">
@@ -145,7 +146,7 @@
 
     private void OnNoItemSubOptionChanged(ChangeEventArgs e)
     {
-        if (Enum.TryParse<NoItemizationType>(e.Value.ToString(), out var newType))
+        if (Enum.TryParse<NoItemizationType>(e.Value?.ToString(), out var newType))
         {
             _formModel.NoItemizationSubOption = newType;
         }

@@ -4,6 +4,5 @@ namespace IntegrationsIntakeForm.Models;
 public enum MappingType
 {
     NoMapping, // single value
-    OneToOne, // based on X segment
-    ManyToOne // based on X segment
+    Dictionary, // based on X segment
 }

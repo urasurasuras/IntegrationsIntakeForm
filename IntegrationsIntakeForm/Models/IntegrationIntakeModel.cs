@@ -31,7 +31,7 @@ public class IntegrationIntakeModel
     // Package Itemization (Conditional Section)
     public bool EnableItemization { get; set; } = false; // Starts unchecked based on picture
     public NoItemizationType NoItemizationSubOption { get; set; } = NoItemizationType.FromFileWithMapping;
-    public string ItemizedRefNoMapping { get; set; }
+    public string ItemizedRefNoMapping { get; set; } = "";
 
     // Misc Notes
     public List<string> MiscNotes { get; set; } = new List<string>
