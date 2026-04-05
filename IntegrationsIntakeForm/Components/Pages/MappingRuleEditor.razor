@@ -2,7 +2,7 @@
 @using IntegrationsIntakeForm.Models
 
 <div class="mapping-section border p-3 rounded mb-3">
-    <h5 class="mb-3 text-secondary">@FieldName Mapping Rules - @Mapping.SelectedType</h5>
+    <h5 class="mb-3 text-secondary">@FieldName</h5>
     <EditForm Model="this">
         <InputRadioGroup @bind-Value="Mapping.SelectedType"
                          @bind-Value:after="() => HandleMappingRadio(Mapping.SelectedType)">
@@ -24,14 +24,14 @@
     @switch (Mapping.SelectedType)
     {
         case MappingType.NoMapping:
-            <div class="mt-2" style="display:@(Mapping.SelectedType == MappingType.NoMapping ? "block" : "none")">
+            <div class="mt-2">
                 <label class="fw-bold">Constant Value:</label>
                 <input type="text" class="form-control" @bind="Mapping.SingleValue" @bind:event="oninput"
                        placeholder="Enter fixed value..." />
             </div>
             break;
         case MappingType.Dictionary:
-            <div class="mt-2" style="display:@(Mapping.SelectedType == MappingType.Dictionary ? "block" : "none")">
+            <div class="mt-2">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h6>1:1 Key-Value Pairs</h6>
                     <button type="button" class="btn btn-sm btn-primary" @onclick="AddOneToOne">+ Add Row</button>
@@ -40,8 +40,8 @@
                 @foreach (var entry in Mapping.OneToOneMappings)
                 {
                     <div class="input-group mb-2">
-                        <input type="text" class="form-control" placeholder="Source Key" @bind="entry.Key" @bind:event="oninput" />
-                        <input type="text" class="form-control" placeholder="Target Value" @bind="entry.Value"
+                        <input type="text" class="form-control" placeholder="Source @FieldName" @bind="entry.Key" @bind:event="oninput" />
+                        <input type="text" class="form-control" placeholder="Target @FieldName" @bind="entry.Value"
                                @bind:event="oninput" />
                         <button type="button" class="btn btn-outline-danger"
                                 @onclick="async () =>
@@ -53,13 +53,8 @@
                     </div>
                 }
             </div>
-            break;
-        
+            break;        
     }
-
-    
-
-    
 </div>
 
 @code {
