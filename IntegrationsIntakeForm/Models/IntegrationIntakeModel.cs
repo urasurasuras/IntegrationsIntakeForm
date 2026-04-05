@@ -1,6 +1,5 @@
 namespace IntegrationsIntakeForm.Models;
 
-// The full intake form state
 public class IntegrationIntakeModel
 {
     public List<Feature> Features { get; set; } = 
@@ -16,7 +15,7 @@ public class IntegrationIntakeModel
         new RequiredField { FieldName = "Vehicle Type" },
         new PackageField { FieldName = "Package Type" }
     ];    
-    // Time Windows Properties
+
     public string PickupFromDateSource { get; set; } = "FromFile";
     public string PickupFromTimeSource { get; set; } = "FromFile";
     public string PickupToDateSource { get; set; } = "FromFile";

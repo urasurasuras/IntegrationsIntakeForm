@@ -1,0 +1,7 @@
+services:
+  your_app_name:
+    build: .
+    container_name: integrations_intake_form_blazor
+    restart: always
+    ports:
+      - "5000:8080"
