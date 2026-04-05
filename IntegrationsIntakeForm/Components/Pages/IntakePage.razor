@@ -141,6 +141,8 @@
 
 @code {
     private IntegrationIntakeModel _formModel = new IntegrationIntakeModel();
+    private string _submissionMarkdown = string.Empty;
+    private bool _showSubmissionResult = false;
     
     private string GetLabelForType(NoItemizationType type)
     {
@@ -155,10 +157,81 @@
     private void ResetForm()
     {
         _formModel = new IntegrationIntakeModel();
+        _showSubmissionResult = false;
     }
 
     private void SubmitForm()
     {
-        Console.WriteLine("Form submitted. Check console for model data.");
+        var markdown = GenerateMarkdown();
+        _submissionMarkdown = markdown;
+        _showSubmissionResult = true;
+        Console.WriteLine("Form submitted. Markdown generated:");
+        Console.WriteLine(markdown);
     }
+
+    private string GenerateMarkdown()
+    {
+        var sb = new System.Text.StringBuilder();
+        
+        sb.AppendLine("# Integration Intake Form Submission");
+        sb.AppendLine($"Generated: {DateTime.Now:g}");
+        sb.AppendLine();
+        
+        // Section 1: Integration Features
+        sb.AppendLine("## 1. Integration Features");
+        var enabledFeatures = _formModel.Features.Where(f => f.IsEnabled).ToList();
+        if (enabledFeatures.Any())
+        {
+            foreach (var feature in enabledFeatures)
+            {
+                sb.AppendLine($"- ✓ {feature.Name}");
+            }
+        }
+        else
+        {
+            sb.AppendLine("- No features selected");
+        }
+        sb.AppendLine();
+        
+        // Section 2: Required ID Fields Mapping
+        sb.AppendLine("## 2. Required ID Fields Mapping");
+        foreach (var field in _formModel.RequiredIdFields)
+        {
+            sb.AppendLine($"### {field.FieldName}");
+            sb.AppendLine($"- **Mapping:** {field.Mapping}");
+        }
+        sb.AppendLine();
+        
+        // Section 3: Time Windows Mapping
+        sb.AppendLine("## 3. Pickup / Delivery Target Time Windows Mapping");
+        sb.AppendLine();
+        sb.AppendLine("| Field | Date Source | Time Source |");
+        sb.AppendLine("|-------|-------------|-------------|");
+        sb.AppendLine($"| Pickup From | {_formModel.PickupFromDateSource} | {_formModel.PickupFromTimeSource} |");
+        sb.AppendLine($"| Pickup To | {_formModel.PickupToDateSource} | {_formModel.PickupToTimeSource} |");
+        sb.AppendLine($"| Delivery From | {_formModel.DeliveryFromDateSource} | {_formModel.DeliveryFromTimeSource} |");
+        sb.AppendLine($"| Delivery To | {_formModel.DeliveryToDateSource} | {_formModel.DeliveryToTimeSource} |");
+        
+        return sb.ToString();
+    }
+
+
+    private async Task CopyToClipboard()
+    {
+        // This would require JS interop to copy to clipboard
+        Console.WriteLine("Markdown copied to clipboard!");
+    }
+}
+
+@if (_showSubmissionResult)
+{
+    <section class="form-section mb-5 mt-5 p-4 bg-light border border-success rounded">
+        <h3 class="mb-3">✓ Submission Summary</h3>
+        <div class="bg-white p-3 border rounded" style="max-height: 400px; overflow-y: auto;">
+            <pre>@_submissionMarkdown</pre>
+        </div>
+        <button class="btn btn-sm btn-info mt-3" @onclick="CopyToClipboard">
+            📋 Copy to Clipboard
+        </button>
+    </section>
 }
