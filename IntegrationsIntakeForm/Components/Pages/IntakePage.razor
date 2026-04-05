@@ -39,31 +39,87 @@
             <section class="form-section mb-5">
                 <h3 class="mb-3">3. Pickup / Delivery Target Time Windows Mapping</h3>
                 
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" @bind="_formModel.MapInboundTimeWindows" id="map-time-windows">
-                    <label class="form-check-label" for="map-time-windows">
-                        Enable mapping as-is from inbound data (based on segment)
-                    </label>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Field</th>
+                                <th class="text-center">Date Source</th>
+                                <th class="text-center">Time Source</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-weight-bold">Pickup From</td>
+                                <td class="text-center">
+                                    <select class="form-control form-control-sm" @bind="_formModel.PickupFromDateSource">
+                                        <option value="FromFile">From File</option>
+                                        <option value="FromConfig">From Config</option>
+                                        <option value="Custom">Custom Logic</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <select class="form-control form-control-sm" @bind="_formModel.PickupFromTimeSource">
+                                        <option value="FromFile">From File</option>
+                                        <option value="FromConfig">From Config</option>
+                                        <option value="Custom">Custom Logic</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold">Pickup To</td>
+                                <td class="text-center">
+                                    <select class="form-control form-control-sm" @bind="_formModel.PickupToDateSource">
+                                        <option value="FromFile">From File</option>
+                                        <option value="FromConfig">From Config</option>
+                                        <option value="Custom">Custom Logic</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <select class="form-control form-control-sm" @bind="_formModel.PickupToTimeSource">
+                                        <option value="FromFile">From File</option>
+                                        <option value="FromConfig">From Config</option>
+                                        <option value="Custom">Custom Logic</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold">Delivery From</td>
+                                <td class="text-center">
+                                    <select class="form-control form-control-sm" @bind="_formModel.DeliveryFromDateSource">
+                                        <option value="FromFile">From File</option>
+                                        <option value="FromConfig">From Config</option>
+                                        <option value="Custom">Custom Logic</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <select class="form-control form-control-sm" @bind="_formModel.DeliveryFromTimeSource">
+                                        <option value="FromFile">From File</option>
+                                        <option value="FromConfig">From Config</option>
+                                        <option value="Custom">Custom Logic</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold">Delivery To</td>
+                                <td class="text-center">
+                                    <select class="form-control form-control-sm" @bind="_formModel.DeliveryToDateSource">
+                                        <option value="FromFile">From File</option>
+                                        <option value="FromConfig">From Config</option>
+                                        <option value="Custom">Custom Logic</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <select class="form-control form-control-sm" @bind="_formModel.DeliveryToTimeSource">
+                                        <option value="FromFile">From File</option>
+                                        <option value="FromConfig">From Config</option>
+                                        <option value="Custom">Custom Logic</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-                @* Conditional panel for time windows *@
-                @if (_formModel.MapInboundTimeWindows)
-                {
-                    <div class="nested-option-panel border p-3 rounded mt-2 ml-4">
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" @bind="_formModel.InboundDate_FromFile" id="inbound-date">
-                            <label class="form-check-label" for="inbound-date">
-                                ↳ Include Inbound Date (from file or custom logic?)
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" @bind="_formModel.InboundTime_FromFile" id="inbound-time">
-                            <label class="form-check-label" for="inbound-time">
-                                ↳ Include Inbound Time (from file or custom logic?)
-                            </label>
-                        </div>
-                    </div>
-                }
             </section>
 
             @* --- Section 5: Package Itemization --- *@
