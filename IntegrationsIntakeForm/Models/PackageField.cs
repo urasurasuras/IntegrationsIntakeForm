@@ -1,6 +1,6 @@
 namespace IntegrationsIntakeForm.Models;
 
-public class PackageItemization : RequiredFieldModel
+public class PackageField : RequiredField
 {
     public bool EnableItemization { get; set; } = false;
     public NoItemizationType NoItemizationSubOption { get; set; } = NoItemizationType.FromFileWithMapping;

@@ -9,12 +9,12 @@ public class IntegrationIntakeModel
         new Feature { Name = "Update", IsEnabled = true },
         new Feature { Name = "Deletion", IsEnabled = true }
     ];
-    public List<RequiredFieldModel> RequiredIdFields { get; set; } =
+    public List<RequiredField> RequiredIdFields { get; set; } =
     [
-        new RequiredFieldModel { FieldName = "Account Number" },
-        new RequiredFieldModel { FieldName = "Service Type" },
-        new RequiredFieldModel { FieldName = "Vehicle Type" },
-        new PackageItemization { FieldName = "Package Type" }
+        new RequiredField { FieldName = "Account Number" },
+        new RequiredField { FieldName = "Service Type" },
+        new RequiredField { FieldName = "Vehicle Type" },
+        new PackageField { FieldName = "Package Type" }
     ];    
     // Time Windows Properties
     public string PickupFromDateSource { get; set; } = "FromFile";
