@@ -2,7 +2,7 @@
 @using IntegrationsIntakeForm.Models
 
 <div class="mapping-section border p-3 rounded mb-3">
-    <h5 class="mb-3 text-secondary">@FieldName</h5>
+    <h5 class="mb-3 text-secondary">@Field.FieldName</h5>
     <EditForm Model="this">
         <InputRadioGroup @bind-Value="Mapping.SelectedType"
                          @bind-Value:after="() => HandleMappingRadio(Mapping.SelectedType)">
@@ -11,7 +11,7 @@
                 string typeString = type.ToString();
                 <div class="form-check mb-2">
                     <InputRadio Value="@type" />
-                    <label class="form-check-label" for="@($"{FieldName}-{typeString}")">
+                    <label class="form-check-label" for="@($"{Field.FieldName}-{typeString}")">
                         @GetLabelForType(type)
                     </label>
                 </div>
@@ -40,8 +40,9 @@
                 @foreach (var entry in Mapping.OneToOneMappings)
                 {
                     <div class="input-group mb-2">
-                        <input type="text" class="form-control" placeholder="Source @FieldName" @bind="entry.Key" @bind:event="oninput" />
-                        <input type="text" class="form-control" placeholder="Target @FieldName" @bind="entry.Value"
+                        <input type="text" class="form-control" placeholder="Source @Field.FieldName" @bind="entry.Key"
+                               @bind:event="oninput" />
+                        <input type="text" class="form-control" placeholder="Target @Field.FieldName" @bind="entry.Value"
                                @bind:event="oninput" />
                         <button type="button" class="btn btn-outline-danger"
                                 @onclick="async () =>
@@ -53,12 +54,29 @@
                     </div>
                 }
             </div>
-            break;        
+            break;
+    }
+
+    @if (Field is PackageField packageField)
+    {
+        <fieldset>
+            <legend>Itemization</legend>
+            <label>
+                <input type="radio" name="EnableItemization_@Field.FieldName" value="true" @(packageField.EnableItemization
+                       ? "checked" : "" ) />
+                Enabled
+            </label>
+            <label>
+                <input type="radio" name="EnableItemization_@Field.FieldName" value="false"
+                       @(!packageField.EnableItemization ? "checked" : "" ) />
+                Disabled
+            </label>
+        </fieldset>
     }
 </div>
 
 @code {
-    [Parameter] public string FieldName { get; set; } = "";
+    [Parameter] public RequiredField Field { get; set; } = new RequiredField();
     [Parameter] public MappingDetail Mapping { get; set; } = new MappingDetail();
     [Parameter] public EventCallback<MappingDetail> MappingChanged { get; set; }
 

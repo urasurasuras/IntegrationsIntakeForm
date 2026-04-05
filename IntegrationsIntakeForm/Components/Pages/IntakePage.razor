@@ -31,9 +31,9 @@
                 <section class="form-section mb-5">
                     <h3 class="mb-3">2. Required ID Fields Mapping</h3>
                     <p class="text-muted">Define the specific mapping rules for each required ID field.</p>
-                    @foreach (var field in _formModel.RequiredIdFields)
+                    @foreach (RequiredField field in _formModel.RequiredIdFields)
                     {
-                        <MappingRuleEditor FieldName="@field.FieldName" @bind-Mapping="field.Mapping" />
+                        <MappingRuleEditor Field="@field" @bind-Mapping="field.Mapping" />
                     }
                 </section>
 
