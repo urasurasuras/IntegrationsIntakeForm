@@ -1,0 +1,34 @@
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [ main ]
+permissions:
+  contents: write
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x' # Match your project version
+
+      - name: Publish App
+        run: dotnet publish IntegrationsIntakeForm.csproj -c Release -o release --nologo
+
+      # GitHub Pages doesn't support SPA routing by default; 
+      # copying index.html to 404.html helps handle direct navigation.
+      - name: Copy index.html to 404.html
+        run: cp release/wwwroot/index.html release/wwwroot/404.html
+
+      # Required for GitHub Pages to serve folders starting with underscores (like _framework)
+      - name: Add .nojekyll file
+        run: touch release/wwwroot/.nojekyll
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: release/wwwroot
+          branch: gh-pages
