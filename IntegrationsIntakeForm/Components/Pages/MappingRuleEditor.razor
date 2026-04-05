@@ -58,8 +58,8 @@
 </div>
 
 @code {
-    [Parameter] public string FieldName { get; set; }
-    [Parameter] public MappingDetail Mapping { get; set; }
+    [Parameter] public string FieldName { get; set; } = "";
+    [Parameter] public MappingDetail Mapping { get; set; } = new MappingDetail();
     [Parameter] public EventCallback<MappingDetail> MappingChanged { get; set; }
 
     private void HandleMappingRadio(MappingType type)

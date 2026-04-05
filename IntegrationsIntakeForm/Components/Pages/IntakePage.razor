@@ -10,7 +10,7 @@
         </div>
         <div class="card-body">
             
-            @* --- Section 1: Integration Allows --- *@
+            @* --- Section 1: Integration Features --- *@
             <section class="form-section mb-5">
                 <h3 class="mb-3">1. Integration Features</h3>
                 <p class="text-muted">Select the capabilities this integration will support.</p>
@@ -18,187 +18,147 @@
                     @foreach (var feature in _formModel.Features)
                     {
                         <div class="form-check form-check-inline mr-4">
-                            <input class="form-check-input" type="checkbox" @bind="feature.IsEnabled" id="@feature.Name.Replace(" ", "-")">
-                            <label class="form-check-label font-weight-bold" for="@feature.Name.Replace(" ", "-")">@feature.Name</label>
-                        </div>
+                            <input class="form-check-input" type="checkbox" @bind="feature.IsEnabled"
+                                   id="@feature.Name.Replace(" ", "-")">
+                                <label class="form-check-label font-weight-bold"
+                                       for="@feature.Name.Replace(" ", "-")">@feature.Name</label>
+                            </div>
+                        }
+                    </div>
+                </section>
+
+                @* --- Section 2: Required ID Fields --- *@
+                <section class="form-section mb-5">
+                    <h3 class="mb-3">2. Required ID Fields Mapping</h3>
+                    <p class="text-muted">Define the specific mapping rules for each required ID field.</p>
+                    @foreach (var field in _formModel.RequiredIdFields)
+                    {
+                        <MappingRuleEditor FieldName="@field.FieldName" @bind-Mapping="field.Mapping" />
                     }
-                </div>
-            </section>
+                </section>
 
-            @* --- Section 3: Required ID Fields --- *@
-            <section class="form-section mb-5">
-                <h3 class="mb-3">2. Required ID Fields Mapping</h3>
-                <p class="text-muted">Define the specific mapping rules for each required ID field.</p>
-                @foreach (var field in _formModel.RequiredIdFields)
-                {
-                    <MappingRuleEditor FieldName="@field.FieldName" @bind-Mapping="field.Mapping" />
-                }
-            </section>
-
-            @* --- Section 4: Time Windows --- *@
-            <section class="form-section mb-5">
-                <h3 class="mb-3">3. Pickup / Delivery Target Time Windows Mapping</h3>
+                @* --- Section 3: Time Windows --- *@
+                <section class="form-section mb-5">
+                    <h3 class="mb-3">3. Pickup / Delivery Target Time Windows Mapping</h3>
                 
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Field</th>
-                                <th class="text-center">Date Source</th>
-                                <th class="text-center">Time Source</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="font-weight-bold">Pickup From</td>
-                                <td class="text-center">
-                                    <select class="form-control form-control-sm" @bind="_formModel.PickupFromDateSource">
-                                        <option value="FromFile">From File</option>
-                                        <option value="FromConfig">From Config</option>
-                                        <option value="Custom">Custom Logic</option>
-                                    </select>
-                                </td>
-                                <td class="text-center">
-                                    <select class="form-control form-control-sm" @bind="_formModel.PickupFromTimeSource">
-                                        <option value="FromFile">From File</option>
-                                        <option value="FromConfig">From Config</option>
-                                        <option value="Custom">Custom Logic</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">Pickup To</td>
-                                <td class="text-center">
-                                    <select class="form-control form-control-sm" @bind="_formModel.PickupToDateSource">
-                                        <option value="FromFile">From File</option>
-                                        <option value="FromConfig">From Config</option>
-                                        <option value="Custom">Custom Logic</option>
-                                    </select>
-                                </td>
-                                <td class="text-center">
-                                    <select class="form-control form-control-sm" @bind="_formModel.PickupToTimeSource">
-                                        <option value="FromFile">From File</option>
-                                        <option value="FromConfig">From Config</option>
-                                        <option value="Custom">Custom Logic</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">Delivery From</td>
-                                <td class="text-center">
-                                    <select class="form-control form-control-sm" @bind="_formModel.DeliveryFromDateSource">
-                                        <option value="FromFile">From File</option>
-                                        <option value="FromConfig">From Config</option>
-                                        <option value="Custom">Custom Logic</option>
-                                    </select>
-                                </td>
-                                <td class="text-center">
-                                    <select class="form-control form-control-sm" @bind="_formModel.DeliveryFromTimeSource">
-                                        <option value="FromFile">From File</option>
-                                        <option value="FromConfig">From Config</option>
-                                        <option value="Custom">Custom Logic</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="font-weight-bold">Delivery To</td>
-                                <td class="text-center">
-                                    <select class="form-control form-control-sm" @bind="_formModel.DeliveryToDateSource">
-                                        <option value="FromFile">From File</option>
-                                        <option value="FromConfig">From Config</option>
-                                        <option value="Custom">Custom Logic</option>
-                                    </select>
-                                </td>
-                                <td class="text-center">
-                                    <select class="form-control form-control-sm" @bind="_formModel.DeliveryToTimeSource">
-                                        <option value="FromFile">From File</option>
-                                        <option value="FromConfig">From Config</option>
-                                        <option value="Custom">Custom Logic</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Field</th>
+                                    <th class="text-center">Date Source</th>
+                                    <th class="text-center">Time Source</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-weight-bold">Pickup From</td>
+                                    <td class="text-center">
+                                        <select class="form-control form-control-sm"
+                                                @bind="_formModel.PickupFromDateSource">
+                                            <option value="FromFile">From File</option>
+                                            <option value="FromConfig">From Config</option>
+                                            <option value="Custom">Custom Logic</option>
+                                        </select>
+                                    </td>
+                                    <td class="text-center">
+                                        <select class="form-control form-control-sm"
+                                                @bind="_formModel.PickupFromTimeSource">
+                                            <option value="FromFile">From File</option>
+                                            <option value="FromConfig">From Config</option>
+                                            <option value="Custom">Custom Logic</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">Pickup To</td>
+                                    <td class="text-center">
+                                        <select class="form-control form-control-sm" @bind="_formModel.PickupToDateSource">
+                                            <option value="FromFile">From File</option>
+                                            <option value="FromConfig">From Config</option>
+                                            <option value="Custom">Custom Logic</option>
+                                        </select>
+                                    </td>
+                                    <td class="text-center">
+                                        <select class="form-control form-control-sm" @bind="_formModel.PickupToTimeSource">
+                                            <option value="FromFile">From File</option>
+                                            <option value="FromConfig">From Config</option>
+                                            <option value="Custom">Custom Logic</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">Delivery From</td>
+                                    <td class="text-center">
+                                        <select class="form-control form-control-sm"
+                                                @bind="_formModel.DeliveryFromDateSource">
+                                            <option value="FromFile">From File</option>
+                                            <option value="FromConfig">From Config</option>
+                                            <option value="Custom">Custom Logic</option>
+                                        </select>
+                                    </td>
+                                    <td class="text-center">
+                                        <select class="form-control form-control-sm"
+                                                @bind="_formModel.DeliveryFromTimeSource">
+                                            <option value="FromFile">From File</option>
+                                            <option value="FromConfig">From Config</option>
+                                            <option value="Custom">Custom Logic</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">Delivery To</td>
+                                    <td class="text-center">
+                                        <select class="form-control form-control-sm"
+                                                @bind="_formModel.DeliveryToDateSource">
+                                            <option value="FromFile">From File</option>
+                                            <option value="FromConfig">From Config</option>
+                                            <option value="Custom">Custom Logic</option>
+                                        </select>
+                                    </td>
+                                    <td class="text-center">
+                                        <select class="form-control form-control-sm"
+                                                @bind="_formModel.DeliveryToTimeSource">
+                                            <option value="FromFile">From File</option>
+                                            <option value="FromConfig">From Config</option>
+                                            <option value="Custom">Custom Logic</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
 
-            @* --- Section 5: Package Itemization --- *@
-            <section class="form-section mb-5">
-                <h3 class="mb-3">4. Package Itemization</h3>
                 
-                <div class="d-flex mb-3">
-                    <div class="form-check mr-4">
-                        <input class="form-check-input" type="radio" name="itemization" id="no-itemization" value="false" @onchange="() => OnItemizationChanged(false)" checked="@(!_formModel.EnableItemization)">
-                        <label class="form-check-label" for="no-itemization">
-                            No itemization
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="itemization" id="itemized" value="true" @onchange="() => OnItemizationChanged(true)" checked="@(_formModel.EnableItemization)">
-                        <label class="form-check-label" for="itemized">
-                            Itemized (with rules for type mapping)
-                        </label>
-                    </div>
-                </div>
-
-                @* Conditional panel 1 (No Itemization) *@
-                @if (!_formModel.EnableItemization)
-                {
-                    <div class="nested-option-panel border p-3 rounded mt-2">
-                        <p class="text-muted mb-2">How should the package type be determined?</p>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="no-item-type" id="type-from-file" value="@NoItemizationType.FromFileWithMapping" @onchange="OnNoItemSubOptionChanged">
-                            <label class="form-check-label" for="type-from-file">
-                                ↳ Type from file, based on mapping
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="no-item-type" id="singular-default" value="@NoItemizationType.SingularDefaultFromConfig" @onchange="OnNoItemSubOptionChanged">
-                            <label class="form-check-label" for="singular-default">
-                                ↳ Singular, default from config
-                            </label>
-                        </div>
-                    </div>
-                }
-
-                @* Conditional panel 2 (Itemized) *@
-                @if (_formModel.EnableItemization)
-                {
-                    <div class="form-group row mt-3 nested-option-panel p-2 rounded">
-                        <label for="itemized-ref" class="col-sm-3 col-form-label font-weight-bold">↳ Reference Number mapping rule:</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="itemized-ref" @bind="_formModel.ItemizedRefNoMapping" placeholder="e.g., item.ref_no">
-                        </div>
-                    </div>
-                }
-            </section>           
-        </div>
-        <div class="card-footer d-flex justify-content-end">
-            <button class="btn btn-outline-secondary mr-2">Reset Form</button>
-            <button class="btn btn-primary" @onclick="SubmitForm">Submit Integration Request</button>
+            </div>
+            <div class="card-footer d-flex justify-content-end">
+                <button class="btn btn-outline-secondary mr-2" @onclick="ResetForm">Reset Form</button>
+                <button class="btn btn-primary" @onclick="SubmitForm">Submit Integration Request</button>
+            </div>
         </div>
     </div>
-</div>
 
 @code {
     private IntegrationIntakeModel _formModel = new IntegrationIntakeModel();
-
-    private void OnItemizationChanged(bool enabled)
+    
+    private string GetLabelForType(NoItemizationType type)
     {
-        _formModel.EnableItemization = enabled;
+        return type switch
+        {
+            NoItemizationType.FromFileWithMapping => "From File (with mapping)",
+            NoItemizationType.SingularDefaultFromConfig => "Singular Default (from config)",
+            _ => type.ToString()
+        };
     }
 
-    private void OnNoItemSubOptionChanged(ChangeEventArgs e)
+    private void ResetForm()
     {
-        if (Enum.TryParse<NoItemizationType>(e.Value?.ToString(), out var newType))
-        {
-            _formModel.NoItemizationSubOption = newType;
-        }
+        _formModel = new IntegrationIntakeModel();
     }
 
     private void SubmitForm()
     {
-        // Add form submission logic here (e.g., API call)
         Console.WriteLine("Form submitted. Check console for model data.");
     }
 }
